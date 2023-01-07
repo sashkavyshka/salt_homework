@@ -6,7 +6,7 @@ from sanic_restful import Api
 
 from src.auth import authenticate
 from src.definitions import ApiError, BadRequestError
-from src.resources import DataResource
+from src.resources import DataResource, DataResourceList
 
 app = Sanic("Test Server")
 api = Api(app)
