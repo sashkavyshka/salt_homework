@@ -1,8 +1,19 @@
-# How to run on GitHub Actions
+# Homework for Salt Security
+
+THis is a homework for Salt Security.
+This is a test that:
+1. Spins up an echo server
+2. Tests sending GET requests to the server and validating the status code of the
+response
+3. Tests shutting down the echo server
+4. Tests sending GET requests to the server and validating that no response was
+received
+
+## How to run on GitHub Actions
 
 If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
 
-# How to run locally
+## How to run locally
 
 To run the server locally you need to run the server.py file
 
