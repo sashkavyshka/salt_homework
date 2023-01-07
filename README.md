@@ -1,7 +1,10 @@
+# How to run on GitHub Actions
+
+If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
+
 # How to run locally
 
 To run the server locally you need to run the server.py file
-If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
 
 ### Run the server.py
 Change to the repository directory
