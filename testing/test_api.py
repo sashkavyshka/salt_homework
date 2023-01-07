@@ -6,7 +6,7 @@ Test to check api calls
 import requests
 import pytest
 import json
-import ping
+from pythonping import ping
 import socket
 import time
 
@@ -235,7 +235,7 @@ def test_server_not_running():
     time.sleep(60)  # The server goes down after 60 sec, and then we try to ping it
     down = False
     try:
-        ping.verbose_ping(URL, count=3)
+        ping(URL, verbose=True, count=3)
     except socket.error as e:
         print("The server is really down:", e)
         down = True
