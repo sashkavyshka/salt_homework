@@ -1,6 +1,7 @@
 # How to run locally
 
 To run the server locally you need to run the server.py file
+If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
 
 ### Run the server.py
 Change to the repository directory
@@ -17,7 +18,7 @@ Run server.py
 ```bash
 $ python server.py
 ```
-The server will be available at `http://localhost:8000` for 1 minute, then it closes automatically. If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
+The server will be available at `http://localhost:8000` for 1 minute, then it closes automatically. 
 
  # Server structure
  The server is written using sanic package, and can get and return simple data objects using the object id or it can return the whole list of objects. You can aalso post a new object to it.
