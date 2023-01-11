@@ -1,3 +1,4 @@
+import os
 from dataclasses import asdict
 
 from sanic.request import Request
@@ -7,7 +8,7 @@ from sanic_restful import Resource
 
 from src.db import data_db
 from src.definitions import BadRequestError, ApiError, Data, KeyVal
-
+import signal
 
 class DataResource(Resource):
     decorators = [protected()]
@@ -46,6 +47,15 @@ class DataResourceList(Resource):
         try:
             body = request.json
             values = [asdict(KeyVal(**value)) for value in body.get("data")]
+            print(values)
+            for i in values[0]:
+                print(i)
+                if values[0][i] == "terminate":
+                    print("Got the terminate signal")
+                    pid = os.getpid()
+                    print(f"Stopping the server, pid={pid}")
+                    os.kill(pid, signal.SIGTERM)
+                    print("The server is stopped")
             object_id = data_db.insert({"data": values})
             return json({"object_id": object_id, "data": values})
         except Exception as e:

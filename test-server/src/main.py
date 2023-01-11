@@ -3,6 +3,7 @@ from sanic.request import Request
 from sanic.response import json
 from sanic_jwt import initialize
 from sanic_restful import Api
+import os
 
 from src.auth import authenticate
 from src.definitions import ApiError, BadRequestError
@@ -12,6 +13,9 @@ app = Sanic("Test Server")
 api = Api(app)
 initialize(app, authenticate=authenticate, url_prefix="/api/auth")
 
+
+def get_pid():
+    pid = os.getpid()
 
 def build_error_response(message, status_code, error_code, **kwargs):
     return json({"error": error_code, "message": message, **kwargs}, status=status_code)

@@ -1,21 +1,6 @@
-# Homework for Salt Security
+# How to run
 
-THis is a homework for Salt Security.
-This is a test that:
-1. Spins up an echo server
-2. Tests sending GET requests to the server and validating the status code of the
-response
-3. Tests shutting down the echo server
-4. Tests sending GET requests to the server and validating that no response was
-received
-
-## How to run on GitHub Actions
-
-If you're using GitHub Actions, Server job and Pytest Job run in parallel, and Pytest job is waiting for 60 sec to test that the server is down.
-
-## How to run locally
-
-To run the server locally you need to run the server.py file
+To run the server run the server.py file
 
 ### Run the server.py
 Change to the repository directory
@@ -32,18 +17,15 @@ Run server.py
 ```bash
 $ python server.py
 ```
-The server will be available at `http://localhost:8000` for 1 minute, then it closes automatically. 
+The server will be available at `http://localhost:8000`
 
- # Server structure
- The server is written using sanic package, and can get and return simple data objects using the object id or it can return the whole list of objects. You can aalso post a new object to it.
- 
  # API Reference
 
  ## Authentication
  You must authenticate with the API to gain access first.
  The following endpoint will return an access token which should be added to the `Authorization` header
 
- Username and password are "test" and "1234"
+ Username and password will be provided.
 
  | Endpoint  | Method | Params                                                             | Response                                                           | Example |
 |-----------|--------|--------------------------------------------------------------------|--------------------------------------------------------------------|---------|
@@ -81,8 +63,8 @@ The object that is returned from the above endpoints.
 ```
 ### Now we assume that the server is running
 
-To test it locally, you have test_api.py file. It's a pytest file, you can run all of it or test by test.
-If you're using GitHub Actions, you have Pytest job for it, it starts simultaneously with the Server job.
+To test it, you have test_api.py file. 
+It's a pytest file, you can run all of it or test by test.
 
 The list of tests is:
 

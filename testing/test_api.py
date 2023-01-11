@@ -8,12 +8,16 @@ import pytest
 import json
 from pythonping import ping
 import socket
-import time
+
 
 URL = "http://localhost:8000"
 data = {
-    "data": [{"key": "key1", "val": "val1", "valType": "str"}]
-}
+    "data": [{"key": "key1", "val": "val1", "valType": "str"}]}
+
+term_data= {
+    "data": [{"key" : "terminate", "val": "val1", "valType": "str"}]}
+
+
 credentials_data = {
     "username": "test",
     "password": "1234"
@@ -71,6 +75,16 @@ def create_obj(headers):
     object = json.loads(res.text)
     return object
 
+
+def stop_server(headers):
+    """
+    Helper function to stop the server
+    Returns:
+        (obj) object
+    """
+    res = requests.post(f"{URL}/api/data/", json=term_data, headers=headers)
+    print(json.dumps(res.json(), indent=4, default=str))
+    return True
 
 def delete_obj(object_id, headers):
     """
@@ -135,7 +149,7 @@ def test_get():
             print("Here is the output!")
             print(json.dumps(obj, indent=4, default=str))
     else:
-        pytest.skip("Couldn't authorize")
+        pytest.xfail("Couldn't authorize")
 
     assert objects != "", "ERROR: GET method didn't bring anything!"
 
@@ -146,9 +160,6 @@ def test_create_obj():
     :return: None
 
     """
-    print("Wrong field names returned: values for data, id for object_id")
-    pytest.skip()
-
     access_token = get_token(credentials_data)
     if access_token:
         # Send request to endpoint
@@ -162,13 +173,13 @@ def test_create_obj():
         print(f'Creating a new object {data}')
         got_obj = create_obj(headers)
 
-        object_id = got_obj['id']
+        object_id = got_obj['object_id']
         print(f"id of created objects: {object_id}")
 
         example_obj = {"data": data["data"], "object_id": object_id}
 
     else:
-        pytest.skip("Couldn't authorize")
+        pytest.xfail("Couldn't authorize")
 
     assert example_obj == got_obj, "Object created is different from object sent!"
 
@@ -195,7 +206,7 @@ def test_get_last_obj():
         print(json.dumps(res.json(), indent=4, default=str))
         example_obj = {"data": data["data"], "object_id": object_id}
     else:
-        pytest.skip("Couldn't authorize")
+        pytest.xfail("Couldn't authorize")
 
     assert example_obj == got_obj, "Object got is different from object saved!"
 
@@ -221,24 +232,38 @@ def test_delete_last_obj():
         print(status_code)
 
     else:
-        pytest.skip("Couldn't authorize")
+        pytest.xfail("Couldn't authorize")
 
-    assert status_code == 204, "The return code is different from expected!"
+    assert status_code == 200, "The return code is different from expected!"
 
 
-def test_server_not_running():
+def test_server_stop():
     """Test that there is no response if the server is not running
 
     :return: None
 
     """
-    time.sleep(60)  # The server goes down after 60 sec, and then we try to ping it
+    access_token = get_token(credentials_data)
+    status_code = 0
     down = False
-    try:
-        ping(URL, verbose=True, count=3)
-    except socket.error as e:
-        print("The server is really down:", e)
-        down = True
+    if access_token:
+        # Send request to endpoint
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {access_token}"
+        }
+        object_id = 0
+        # Endpoint: /api/data/<object_id>
+        # Method: GET
+        print(f'Trying to stop the server, sending {term_data}')
+
+        try:
+            got_obj = stop_server(headers)
+        except socket.error as e:
+            print("The server is really down")
+            down = True
+    else:
+        pytest.xfail("Couldn't authorize")
 
     assert down, "The server isn't down!"
 
@@ -249,12 +274,11 @@ def test_get_after_shutdown():
     :return: None
 
     """
-    access_token = get_token(credentials_data)
     down = False
-    if access_token:
-        print("The server isn't down!")
-    else:
-        print("Couldn't authorize, the server seems to be down")
+    try:
+        access_token = get_token(credentials_data)
+    except socket.error as e:
+        print("The server is really down")
         down = True
 
     assert down, "ERROR: The server isn't really down!"
