@@ -6,7 +6,6 @@ Test to check api calls
 import requests
 import pytest
 import json
-from pythonping import ping
 import socket
 
 
