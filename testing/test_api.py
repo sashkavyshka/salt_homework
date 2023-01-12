@@ -9,7 +9,7 @@ import json
 import socket
 
 
-URL = "http://0.0.0.0:8000"
+URL = "http://localhost:8000"
 data = {
     "data": [{"key": "key1", "val": "val1", "valType": "str"}]}
 
